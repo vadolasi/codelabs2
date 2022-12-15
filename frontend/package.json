@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@juggle/resize-observer": "^3.4.0",
     "@next/font": "^13.0.6",
+    "@react-spring/web": "^9.6.0",
     "@stackblitz/sdk": "^1.8.1",
     "@types/node": "18.11.13",
     "@types/react": "18.0.26",
@@ -17,10 +19,15 @@
     "@uiw/react-codemirror": "^4.19.3",
     "eslint": "8.29.0",
     "eslint-config-next": "13.0.6",
+    "immer": "^9.0.16",
     "jotai": "^1.11.2",
+    "jotai-immer": "^0.1.0",
     "next": "13.0.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-resize-detector": "^7.1.2",
+    "react-split": "^2.0.14",
+    "react-use-measure": "^2.1.1",
     "typescript": "4.9.4"
   },
   "devDependencies": {

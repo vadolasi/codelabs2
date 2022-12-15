@@ -9,9 +9,9 @@ export default function FileExplorer() {
   const [files] = useAtom(filesAtom)
 
   return (
-    <div className="h-full bg-blue-500">
+    <div className="h-full w-50 bg-blue-gray-800 box-border p-3">
       <div>
-        {files.filter(file => file.parent == "/").map(file => {
+        {files.filter(file => file.parent == "").map(file => {
           switch (file.type) {
             case "file":
               return <File key={`${file.parent}/${file.name}`} name={file.name} parent={file.parent} />
