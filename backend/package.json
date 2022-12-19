@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pm2 start ecosystem.config.js --env development --no-daemon --watch",
-    "start": "pm2 start ecosystem.config.js --env production",
+    "dev": "pm2-runtime start ecosystem.config.js --env development --watch",
+    "prod": "pm2-runtime start ecosystem.config.js --env production",
     "postinstall": "pm2 install typescript"
   },
   "keywords": [],
@@ -15,8 +15,6 @@
     "@socket.io/cluster-adapter": "^0.2.1",
     "@socket.io/pm2": "github:vadolasi/pm2",
     "@socket.io/sticky": "^1.0.2",
-    "ataraxia": "^0.12.2",
-    "ataraxia-ws-server": "^0.12.0",
     "hyper-express": "^6.5.2",
     "socket.io": "^4.5.4",
     "socket.io-msgpack-parser": "^3.0.2"
@@ -24,9 +22,7 @@
   "devDependencies": {
     "@types/node": "18.11.13",
     "@types/ws": "^8.5.3",
-    "nodemon": "^2.0.20",
     "prisma": "^4.7.1",
-    "sucrase": "^3.29.0",
     "ts-node": "^10.9.1"
   }
 }

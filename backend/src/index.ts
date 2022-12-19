@@ -18,12 +18,10 @@ io.on("connection", (socket) => {
   })
 })
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.send("Hello World!")
 })
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 8000
-
-app.listen(port)
-  .then(() => console.log(`Server listening on http://localhost:${port}`))
+app.listen(8000)
+  .then(() => console.log("Server listening on http://localhost:8000"))
   .catch(console.error)
