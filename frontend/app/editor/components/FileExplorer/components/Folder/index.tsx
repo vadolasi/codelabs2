@@ -43,7 +43,7 @@ const Folder = memo<Props>(({ name, parent }) => {
 
   return (
     <div>
-      <button onClick={() => setIsOpen(!file.isOpen)} className="w-full border-0 bg-white bg-opacity-0 hover:bg-opacity-25 text-left rounded p-2 text-white font-medium text-base">{viewHeight}</button>
+      <button onClick={() => setIsOpen(!file.isOpen)} className="w-full border-0 bg-white bg-opacity-0 hover:bg-opacity-25 text-left rounded p-2 text-white font-medium text-base transition-all duration-200 ease-in-out">{file.name}</button>
       <a.div style={{ height, opacity, overflow: "hidden" }}>
         <div className="flex ml-2" ref={ref}>
           <div style={{ height: file.isOpen && previous === file.isOpen ? 'auto' : viewHeight }} className="group w-3 flex justify-center" onClick={() => setIsOpen(!file.isOpen)}>
