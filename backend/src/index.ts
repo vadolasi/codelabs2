@@ -3,6 +3,7 @@ import { Server as SocketIO } from "socket.io"
 import parser from "socket.io-msgpack-parser"
 import { createAdapter } from "@socket.io/cluster-adapter"
 import { setupWorker } from "@socket.io/sticky"
+import { usersRouter } from "./modules/users"
 
 const app = new Server()
 
@@ -18,9 +19,7 @@ io.on("connection", (socket) => {
   })
 })
 
-app.get("/", (_req, res) => {
-  res.send("Hello World!")
-})
+app.use("/users", usersRouter)
 
 app.listen(8000)
   .then(() => console.log("Server listening on http://localhost:8000"))

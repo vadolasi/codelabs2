@@ -14,9 +14,9 @@ export default function FileExplorer() {
         {files.filter(file => file.parent == "").map(file => {
           switch (file.type) {
             case "file":
-              return <File key={`${file.parent}/${file.name}`} name={file.name} parent={file.parent} />
+              return <File key={`file:${file.parent}/${file.name}`} name={file.name} parent={file.parent} />
             case "folder":
-              return <Folder key={`${file.parent}/${file.name}`} name={file.name} parent={file.parent} />
+              return <Folder key={`folder:${file.parent}/${file.name}`} name={file.name} parent={file.parent} />
           }
         })}
       </div>

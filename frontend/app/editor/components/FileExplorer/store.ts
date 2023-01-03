@@ -20,4 +20,5 @@ export const filesAtom = atom<(File | Folder)[]>([
   { type: "folder", name: "test", parent: "/test/test", isOpen: false },
   { type: "file", name: "test", parent: "/test/test", content: "" },
   { type: "folder", name: "test2", parent: "", isOpen: false },
+  { type: "file", name: "file", parent: "", content: "" },
 ])
