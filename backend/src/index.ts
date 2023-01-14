@@ -4,8 +4,15 @@ import parser from "socket.io-msgpack-parser"
 import { createAdapter } from "@socket.io/cluster-adapter"
 import { setupWorker } from "@socket.io/sticky"
 import { usersRouter } from "./modules/users"
+import { unpack, pack } from "msgpackr"
 
 const app = new Server()
+
+app.use((req, res, next) => {
+  req.json = async () => unpack(await req.body())
+  res.json = (data) => Boolean(res.send(pack(data)))
+  next()
+})
 
 const io = new SocketIO({ parser, transports: ["websocket"] })
 io.attachApp(app)

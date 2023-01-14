@@ -8,15 +8,21 @@ interface Props {
 }
 
 export default function SplitLayout({ id }: Props): JSX.Element {
-  const [layout] = useAtom(layoutAtom)
+  const [layout, setLayout] = useAtom(layoutAtom)
   const split = layout[id] as ISplit
-  const parent = layout[split.parent]
+  const parent = layout[split.parent] as ISplit
 
   const selected = parent && parent.selected == id
 
+  const onDragEnd = (sizes: number[]) => {
+    setLayout(layout => {
+      ;(layout[id] as ISplit).sizes = sizes
+    })
+  }
+
   return (
-    <div className={`bg-blue-800 p-2 rounded-lg ${selected ? "border border-gray-400" : ""}`}>
-      <Split direction={split.direction}>
+    <div className={`bg-blue-800 p-2 rounded-lg ${selected && "border border-gray-400"}`}>
+      <Split direction={split.direction} onDragEnd={onDragEnd} sizes={split.sizes}>
         {split.children.map((child) => {
           switch (layout[child].type) {
             case "split":

@@ -14,18 +14,18 @@ export interface Tabs {
   type: "tabs"
   id: number
   selected: number
-  tabs: Tab[]
+  tabs: number[]
   parent: number
   focused: boolean
 }
 
 export interface Tab {
-  type: "editor" | "terminal"
+  type: "tab"
+  tabType: "editor" | "terminal"
   id: number
   name: string
   data: any
+  parent: number
 }
 
-const intialStore: { [key: number]: (Split | Tabs) } = {}
-
-export const layoutAtom = atomWithImmer<{ [key: number]: (Split | Tabs) }>(intialStore)
+export const layoutAtom = atomWithImmer<{ [key: number]: (Split | Tabs | Tab) }>({})

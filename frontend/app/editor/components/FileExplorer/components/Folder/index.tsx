@@ -8,6 +8,7 @@ import { memo, useEffect, useRef } from "react"
 interface Props {
   name: string
   parent: string
+  id: number
 }
 
 function usePrevious<T>(value: T) {
@@ -16,7 +17,7 @@ function usePrevious<T>(value: T) {
   return ref.current
 }
 
-const Folder = memo<Props>(({ name, parent }) => {
+const Folder = memo<Props>(({ name, parent, id }) => {
   const [files, setFiles] = useAtom(filesAtom)
   const file = files.find(file => file.type == "folder" && file.name == name && file.parent == parent) as IFolder
   const previous = usePrevious(file.isOpen)
@@ -53,9 +54,9 @@ const Folder = memo<Props>(({ name, parent }) => {
             {file.isOpen && files.filter(file => file.parent == `${parent}/${name}`).map(file => {
               switch (file.type) {
                 case "file":
-                  return <File key={`file:${file.parent}/${file.name}`} name={file.name} parent={file.parent} />
+                  return <File key={`file:${file.parent}/${file.name}`} name={file.name} parent={file.parent} id={file.id} />
                 case "folder":
-                  return <Folder key={`folder:${file.parent}/${file.name}`} name={file.name} parent={file.parent} />
+                  return <Folder key={`folder:${file.parent}/${file.name}`} name={file.name} parent={file.parent} id={file.id} />
               }
             })}
           </a.div>

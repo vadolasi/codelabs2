@@ -3,15 +3,13 @@
 import { useAtom } from "jotai"
 import FileExplorer from "./components/FileExplorer"
 import Split from "./components/Split"
-import { layoutAtom, Split as ISplit, Tabs as ITabs } from "./components/SplitLayout/store"
+import { layoutAtom, Split as ISplit, Tabs as ITabs, Tab as ITab } from "./components/SplitLayout/store"
 import Tabs from "./components/SplitLayout/components/Tabs"
 import { default as MySplit } from "./components/SplitLayout"
-import { DndProvider } from "react-dnd"
-import { HTML5Backend } from "react-dnd-html5-backend"
 import useMeasure from "react-use-measure"
 import { useEvent } from "./context"
-import { filesAtom, File } from "./components/FileExplorer/store"
-import { useEffect } from "react"
+import { filesAtom } from "./components/FileExplorer/store"
+import { DragDropContext } from "react-beautiful-dnd"
 
 export default function EditorPage(): JSX.Element {
   const [layout, setLayout] = useAtom(layoutAtom)
@@ -20,12 +18,10 @@ export default function EditorPage(): JSX.Element {
 
   const [files] = useAtom(filesAtom)
 
-  useEvent<[string, string]>("file:open", (name, parent) => {
-    const file = files.find(file => file.type == "file" && file.name == name && file.parent == parent) as File
+  useEvent<[number]>("file:open", (id) => {
+    const file = files.find(file => file.id == id)!
 
     if (!layout[0]) {
-      const id = Math.random()
-
       setLayout({
         0: {
           type: "split",
@@ -38,26 +34,76 @@ export default function EditorPage(): JSX.Element {
         },
         1: {
           type: "tabs",
-          tabs: [{ type: "editor", data: file, name: file.name, id }],
+          tabs: [id],
           parent: 0,
           id: 1,
           selected: id,
           focused: true
+        },
+        [id]: {
+          type: "tab",
+          tabType: "editor",
+          name: file.name,
+          id: id,
+          data: file,
+          parent: 1
         }
       })
     } else {
       setLayout(layout => {
-        const focusedTabsId = Object.values(layout).find((item: ITabs | ISplit) => item.type == "tabs" && item.focused)?.id!
+        const split = layout[0] as ISplit
+        const tabs = layout[split.selected] as ITabs
+        const tab = layout[id] as ITab
 
-        ;(layout[focusedTabsId] as ITabs).tabs.push({ type: "editor", data: file, name: file.name, id: Math.random() })
+        if (tab) {
+          tabs.selected = id
+        } else {
+          const newTab = {
+            type: "tab",
+            tabType: "editor",
+            name: file.name,
+            id: id,
+            data: file,
+            parent: split.selected
+          } as ITab
+
+          layout[id] = newTab
+          tabs.tabs.push(id)
+          tabs.selected = id
+        }
       })
     }
   })
 
+  const moveTab = (id: number, tabsId: number, index: number) => {
+    setLayout(layout => {
+      const tab = layout[id] as ITab
+      const tabs = layout[tabsId] as ITabs
+
+      tabs.tabs.splice(tabs.tabs.indexOf(id), 1)
+      tabs.tabs.splice(index, 0, id)
+      tab.parent = tabsId
+    })
+  }
+
+  const onDragEnd = (sizes: number[]) => {
+    setLayout(layout => {
+      ;(layout[0] as ISplit).sizes = sizes
+    })
+  }
+
   return (
     <div ref={ref}>
-      <DndProvider backend={HTML5Backend}>
-        <Split direction="horizontal" sizes={[250 * 100 / bounds.width, 100 - (250 * 100 / bounds.width)]} maxSize={[300, Infinity]} minSize={[200, 0]}>
+      <DragDropContext onDragEnd={({ source, destination, draggableId }) => {
+        if (!destination) return
+
+        if (source.droppableId == destination.droppableId) {
+          moveTab(parseInt(draggableId), parseInt(source.droppableId), destination.index)
+        } else {
+          moveTab(parseInt(draggableId), parseInt(destination.droppableId), destination.index)
+        }
+      }}>
+        <Split direction="horizontal" maxSize={[300, Infinity]} minSize={[200, 0]} onDragEnd={onDragEnd} sizes={[250 * 100 / bounds.width, 100 - (250 * 100 / bounds.width)]}>
           <FileExplorer />
           {split ? split.children.map(child => {
             switch (layout[child].type) {
@@ -75,7 +121,7 @@ export default function EditorPage(): JSX.Element {
             </div>
           )}
         </Split>
-      </DndProvider>
+      </DragDropContext>
     </div>
   )
 }

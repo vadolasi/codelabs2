@@ -6,7 +6,7 @@ interface Props {
   [key: string]: any
 }
 
-export default function Split({ direction, children, ...rest }: Props): JSX.Element {
+export default function Split({ direction, children, onDragEnd, sizes, ...rest }: Props): JSX.Element {
   return (
     <ReactSplit
       direction={direction}
