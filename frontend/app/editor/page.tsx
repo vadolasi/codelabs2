@@ -10,13 +10,33 @@ import useMeasure from "react-use-measure"
 import { useEvent } from "./context"
 import { filesAtom } from "./components/FileExplorer/store"
 import { DragDropContext } from "react-beautiful-dnd"
+import { draggingTabAtom } from "./store"
+import { animated, useSpring, useSpringRef } from "@react-spring/web"
 
 export default function EditorPage(): JSX.Element {
   const [layout, setLayout] = useAtom(layoutAtom)
+  const [dragging, setDragging] = useAtom(draggingTabAtom)
   const split = layout[0] as ISplit
   const [ref, bounds] = useMeasure()
-
   const [files] = useAtom(filesAtom)
+
+  const api = useSpringRef()
+  const props = useSpring({
+    ref: api,
+    from: {
+      opacity: 0
+    }
+  })
+
+  useEvent<[any, any]>("test", (rect, preRect) => {
+    api.start({
+      from : { width: preRect.width, height: preRect.height, top: preRect.y, left: preRect.x },
+      to: { width: rect.width, height: rect.height, top: rect.y, left: rect.x },
+      config: {
+        duration: 100
+      }
+    })
+  })
 
   useEvent<[number]>("file:open", (id) => {
     const file = files.find(file => file.id == id)!
@@ -94,15 +114,37 @@ export default function EditorPage(): JSX.Element {
 
   return (
     <div ref={ref}>
-      <DragDropContext onDragEnd={({ source, destination, draggableId }) => {
-        if (!destination) return
+      <DragDropContext
+        onDragStart={() => {
+          setDragging({ isDragging: true })
+          api.start({
+            to: {
+              opacity: 1
+            },
+            config: {
+              duration: 100
+            }
+          })
+        }}
+        onDragEnd={({ source, destination, draggableId }) => {
+          setDragging({ isDragging: false })
+          api.start({
+            to: {
+              opacity: 0
+            },
+            config: {
+              duration: 100
+            }
+          })
+          if (!destination) return
 
-        if (source.droppableId == destination.droppableId) {
-          moveTab(parseInt(draggableId), parseInt(source.droppableId), destination.index)
-        } else {
-          moveTab(parseInt(draggableId), parseInt(destination.droppableId), destination.index)
-        }
-      }}>
+          if (source.droppableId == destination.droppableId) {
+            moveTab(parseInt(draggableId), parseInt(source.droppableId), destination.index)
+          } else {
+            moveTab(parseInt(draggableId), parseInt(destination.droppableId), destination.index)
+          }
+        }}
+      >
         <Split direction="horizontal" maxSize={[300, Infinity]} minSize={[200, 0]} onDragEnd={onDragEnd} sizes={[250 * 100 / bounds.width, 100 - (250 * 100 / bounds.width)]}>
           <FileExplorer />
           {split ? split.children.map(child => {
@@ -122,6 +164,7 @@ export default function EditorPage(): JSX.Element {
           )}
         </Split>
       </DragDropContext>
+      {dragging.isDragging && <animated.div style={props} className="fixed rounded-lg bg-opacity-25 bg-blue-600 border-2 border-blue-600 border-dashed" />}
     </div>
   )
 }

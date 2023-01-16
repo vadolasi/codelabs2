@@ -22,10 +22,10 @@ export default function Tab({ parentId, id, index }: Props): JSX.Element {
 
   return (
     <Draggable key={id} draggableId={id.toString()} index={index}>
-      {(provided) => (
-        <div onClick={select} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+      {provided => (
+        <div onClick={select} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={`relative group cursor-pointer bg-opacity-25 bg-gray-500 mx-1 p-1 rounded w-25 hover:bg-opacity-50 truncate ${tabs.selected == tab.id ? "text-blue-400" : "text-white"} transition-all duration-200 ease-in-out`} id={id.toString()}>
           <span
-            className={`w-full truncate p-1 ${tabs.selected == tab.id ? "font-medium text-blue-400" : "text-white"}`}
+            className={`w-full p-1`}
           >
             {tab.name}
           </span>
