@@ -1,14 +1,14 @@
 "use client"
 
 import { useAtom } from "jotai"
-import FileExplorer from "./components/FileExplorer"
+import Sidebar from "./components/Sidebar"
 import Split from "./components/Split"
 import { layoutAtom, Split as ISplit, Tabs as ITabs, Tab as ITab } from "./components/SplitLayout/store"
 import Tabs from "./components/SplitLayout/components/Tabs"
 import { default as MySplit } from "./components/SplitLayout"
 import useMeasure from "react-use-measure"
 import { useEvent } from "./context"
-import { filesAtom } from "./components/FileExplorer/store"
+import { filesAtom } from "./components/Sidebar/FileExplorer/store"
 import { DragDropContext } from "react-beautiful-dnd"
 import { draggingTabAtom } from "./store"
 import { animated, useSpring, useSpringRef } from "@react-spring/web"
@@ -146,7 +146,7 @@ export default function EditorPage(): JSX.Element {
         }}
       >
         <Split direction="horizontal" maxSize={[300, Infinity]} minSize={[200, 0]} onDragEnd={onDragEnd} sizes={[250 * 100 / bounds.width, 100 - (250 * 100 / bounds.width)]}>
-          <FileExplorer />
+          <Sidebar />
           {split ? split.children.map(child => {
             switch (layout[child].type) {
               case "split":
@@ -156,7 +156,7 @@ export default function EditorPage(): JSX.Element {
             }
           }) : (
             <div className="flex-1 bg-gray-700 rounded-lg">
-              <div className="flex flex-col items-center justify-center h-full">
+              <div className="flex flex-col items-center justify-center h-full p-2">
                 <div className="text-2xl text-gray-400">No files open</div>
                 <div className="text-gray-400">Open a file from the file explorer on the left</div>
               </div>
