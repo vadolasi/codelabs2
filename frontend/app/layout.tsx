@@ -1,20 +1,17 @@
-import "./uno.css"
-// import { Inter } from "@next/font/google"
-import { EditorContextProvider } from "./editor/context"
-
-// const inter = Inter({ subsets: ["latin"] })
+import "windi.css"
+import { Providers } from "./providers"
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {
   return (
-    <EditorContextProvider>
-      <html lang="pt-BR">
-        <head />
-        <body className={`${""} m-0 bg-blue-gray-800`}>{children}</body>
-      </html>
-    </EditorContextProvider>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head />
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
   )
 }

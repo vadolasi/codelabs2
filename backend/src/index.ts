@@ -1,6 +1,6 @@
 import { Server } from "hyper-express"
 import { Server as SocketIO } from "socket.io"
-import parser from "socket.io-msgpack-parser"
+import * as parser from "socket.io-msgpack-parser"
 import { createAdapter } from "@socket.io/cluster-adapter"
 import { setupWorker } from "@socket.io/sticky"
 import { usersRouter } from "./modules/users"

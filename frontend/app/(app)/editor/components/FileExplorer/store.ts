@@ -17,7 +17,5 @@ export interface Folder {
 }
 
 export const filesAtom = atom<(File | Folder)[]>([
-  { type: "file", name: "testtttttttttttt.py", parent: "", content: "", id: 2 },
-  { type: "file", name: "test2.py", parent: "", content: "", id: 5 },
-  { type: "file", name: "file.py", parent: "", content: "", id: 6 }
+  { type: "file", name: "index.ts", parent: "", content: "", id: 2 }
 ])

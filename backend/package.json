@@ -17,10 +17,16 @@
     "@socket.io/cluster-adapter": "^0.2.1",
     "@socket.io/pm2": "github:vadolasi/pm2",
     "@socket.io/sticky": "^1.0.2",
+    "@types/graphql": "^14.5.0",
+    "graphql": "^16.6.0",
+    "graphql-ws": "^5.11.2",
+    "graphql-yoga": "^3.3.0",
     "hyper-express": "^6.5.2",
     "msgpackr": "^1.8.1",
     "socket.io": "^4.5.4",
-    "socket.io-msgpack-parser": "^3.0.2"
+    "socket.io-msgpack-parser": "^3.0.2",
+    "type-graphql": "^1.1.1",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.19.0"
   },
   "devDependencies": {
     "@types/node": "18.11.13",
